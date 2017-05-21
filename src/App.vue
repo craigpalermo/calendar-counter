@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <calendar-month number="2"></calendar-month>
+    <calendar-month number="5"></calendar-month>
   </div>
 </template>
 
@@ -16,4 +16,13 @@ export default {
 </script>
 
 <style>
+  .flex-row {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  .flex-col {
+    display: flex;
+    flex-flow: column nowrap;
+  }
 </style>
