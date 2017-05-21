@@ -1,18 +1,25 @@
 <template>
   <div id="app">
-    <calendar-month number="5"></calendar-month>
+    <calendar-year :year="year"></calendar-year>
   </div>
 </template>
 
 <script>
-import CalendarMonth from './components/CalendarMonth';
+  import moment from 'moment';
 
-export default {
-  name: 'app',
-  components: {
-    CalendarMonth,
-  },
-};
+  import CalendarYear from './components/CalendarYear';
+
+  export default {
+    name: 'app',
+    components: {
+      CalendarYear,
+    },
+    data() {
+      return {
+        year: moment().year(),
+      };
+    },
+  };
 </script>
 
 <style>
