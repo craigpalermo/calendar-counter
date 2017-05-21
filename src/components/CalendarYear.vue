@@ -1,11 +1,17 @@
 <template>
   <div class="calendar-year">
-    <h1 class="year">{{ year }}</h1>
+    <!-- year number -->
+    <h1 class="year">
+      {{ year }}
+      <span class="text-muted">({{ sum }})</span>
+    </h1>
 
+    <!-- months -->
     <div class="months-container">
-      <calendar-month :year="year"
+      <calendar-month v-for="month in 12"
+                      v-on:monthSumChanged="updateSum"
+                      :year="year"
                       :month="month"
-                      v-for="month in 12"
                       :key="month">
       </calendar-month>
     </div>
@@ -20,6 +26,21 @@
     props: ['year'],
     components: {
       CalendarMonth,
+    },
+    data() {
+      return {
+        monthSums: Array(12).fill(0),
+        sum: 0,
+      };
+    },
+    methods: {
+      updateSum(data) {
+        // Update month's value
+        this.monthSums[data.month - 1] = data.value;
+
+        // Recompute sum for year
+        this.sum = this.monthSums.reduce((total, val) => total + val, 0);
+      },
     },
   };
 </script>

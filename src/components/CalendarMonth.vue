@@ -96,8 +96,17 @@
         return [...lastMonth, ...thisMonth, ...nextMonth];
       },
       updateSum(data) {
+        // Update value in array
         this.days[data.index].value = data.value;
+
+        // Recompute sum for month
         this.sum = this.days.reduce((total, day) => total + day.value, 0);
+
+        // Let parent know that sum changed
+        this.$emit('monthSumChanged', {
+          month: this.month,
+          value: this.sum,
+        });
       },
     },
     computed: {
