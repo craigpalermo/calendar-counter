@@ -28,19 +28,40 @@
       CalendarMonth,
     },
     data() {
-      return {
-        monthSums: Array(12).fill(0),
-        sum: 0,
-      };
+      return {};
     },
     methods: {
       updateSum(data) {
-        // Update month's value
-        this.monthSums[data.month - 1] = data.value;
-
-        // Recompute sum for year
-        this.sum = this.monthSums.reduce((total, val) => total + val, 0);
+        this.$store.commit('updateMonthSum', {
+          year: this.year,
+          month: data.month,
+          value: data.value,
+        });
       },
+    },
+    computed: {
+      sum() {
+        const values = this.$store.getters.years[this.year];
+        return values.reduce((total, val) => total + val, 0);
+      },
+    },
+    created() {
+      const years = this.$store.getters.years;
+      let values;
+
+      if (!years[this.year]) {
+        values = Array(12).fill(0);
+
+        // initialize array for this year if it DNE
+        this.$store.commit('addYear', {
+          year: this.year,
+          values,
+        });
+      } else {
+        values = years[this.year];
+      }
+
+      return values;
     },
   };
 </script>

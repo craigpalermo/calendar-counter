@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import App from './App';
+import store from './store';
 
 Vue.use(BootstrapVue);
 
@@ -16,4 +17,5 @@ new Vue({
   el: '#app',
   template: '<App/>',
   components: { App },
+  store,
 });
