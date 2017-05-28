@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <calendar-year :year="year"></calendar-year>
+    <calendar-year></calendar-year>
   </div>
 </template>
 
 <script>
-  import moment from 'moment';
-
   import CalendarYear from './components/CalendarYear';
 
   export default {
@@ -16,7 +14,6 @@
     },
     data() {
       return {
-        year: moment().year(),
       };
     },
   };

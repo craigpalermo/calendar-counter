@@ -25,7 +25,10 @@
             <div class="day"
                  v-for="(day, idx) in days">
               <div v-show="day.active">
-                <calendar-day :index="idx" :date="day.date" v-on:valueChanged="updateSum"></calendar-day>
+                <calendar-day :index="idx"
+                              :date="day.date"
+                              :value="day.value"
+                              v-on:valueChanged="updateSum"></calendar-day>
               </div>
             </div>
           </div>
@@ -54,12 +57,18 @@
     },
     data() {
       return {
-        days: this.getValuesArray(this.month, this.year),
         weekdays: ['Su', 'Mo', 'Tu', 'Wd', 'Th', 'Fr', 'Sa'],
-        sum: 0,
       };
     },
     methods: {
+      /**
+       * Returns an array of objects of length num. Each entry has a value of 0,
+       * and active set to given active value. Each day has date property that represents
+       * the number of that day in the current month.
+       * @param num
+       * @param active
+       * @returns {Array}
+       */
       initValuesArray(num, active) {
         let i = 0;
         const values = [];
@@ -78,7 +87,17 @@
         }
         return values;
       },
+      /**
+       * Returns array of objects used to render the calendar month. Days before/after
+       * the current month have active set to false so their inputs can be hidden. If values
+       * for this month exist already in vuex store, initialize corresponding dates to
+       * those values, otherwise set to undefined.
+       * @param number
+       * @param year
+       * @returns {[*,*,*]}
+       */
       getValuesArray(number, year) {
+        // Compute values used to initialize arrays of dates to display
         const firstOfMonth = moment(new Date(year, number - 1)).date(1);
         const daysInMonth = firstOfMonth.daysInMonth();
         const firstWeekdayOffset = firstOfMonth.isoWeekday();
@@ -93,19 +112,28 @@
         const remainingDays = (((lastMonth.length + thisMonth.length) % 7) + 1);
         const nextMonth = this.initValuesArray(remainingDays, false);
 
-        return [...lastMonth, ...thisMonth, ...nextMonth];
+        // Create array of calendar days
+        let calendarDays = [...lastMonth, ...thisMonth, ...nextMonth];
+
+        // Add values from store to each calendar day
+        const values = this.$store.getters.years[this.year][this.month - 1];
+        calendarDays = calendarDays.map((d, index) => {
+          const day = d;
+          day.value = values[index];
+          return day;
+        });
+
+        return calendarDays;
       },
       updateSum(data) {
         // Update value in array
         this.days[data.index].value = data.value;
 
-        // Recompute sum for month
-        this.sum = this.days.reduce((total, day) => total + day.value, 0);
-
-        // Let parent know that sum changed
-        this.$emit('monthSumChanged', {
+        // Update values for this month in store
+        this.$emit('updateMonth', {
+          year: this.year,
           month: this.month,
-          value: this.sum,
+          values: this.days.map(x => x.value),
         });
       },
     },
@@ -115,6 +143,12 @@
       },
       numWeeks() {
         return Math.floor(this.days.length / 7);
+      },
+      sum() {
+        return this.days.reduce((total, day) => total + (day.value || 0), 0);
+      },
+      days() {
+        return this.getValuesArray(this.month, this.year);
       },
     },
   };

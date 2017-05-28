@@ -4,13 +4,14 @@
 
     <input type="number"
            min="0"
+           :value="value"
            v-on:input="valueChanged">
   </div>
 </template>
 
 <script>
   export default {
-    props: ['index', 'date'],
+    props: ['index', 'date', 'value'],
     name: 'calendar-day',
     methods: {
       valueChanged(event) {

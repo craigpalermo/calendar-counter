@@ -13,8 +13,8 @@ const mutations = {
   addYear(s, { year, values }) {
     Vue.set(s.years, year, values);
   },
-  updateMonthSum(s, { year, month, value }) {
-    s.years[year].splice(month - 1, 1, value);
+  updateMonth(s, { year, month, values }) {
+    s.years[year].splice(month - 1, 1, values);
   },
 };
 
