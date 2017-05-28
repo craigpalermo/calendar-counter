@@ -1,6 +1,6 @@
 # calendar-counter
 
-> A Vue.js project
+> Enter a value for each calendar day and see the sums for each month and year over time.
 
 ## Build Setup
 
@@ -23,5 +23,12 @@ npm run unit
 # run all tests
 npm test
 ```
+
+## TODO
+- Highlight days with nonzero values
+- Server to make calendars available via anonymous links
+- Stats page
+    - Graph of sums for months and years over time
+    - Month and year with highest sum
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
